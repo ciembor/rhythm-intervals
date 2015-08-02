@@ -1,0 +1,61 @@
+<html ng-app="rhythmIntervals">
+  <head>
+    <title>Rhythm Intervals</title>
+    <link href="bower_components/bootstrap/dist/css/bootstrap.css" type="text/css" rel="stylesheet">
+    <link href="fonts.css" type="text/css" rel="stylesheet">
+    <style>
+      html, body {
+        background-color: #444;
+      }
+      .header{font-family: 'Verlag A', 'Verlag B';}
+      .container{max-width: 720px}
+      .header{text-align: center}
+      .header{font-size: 3em; font-weight: bold;}
+      .remove{float: right; height: 34px;}
+      select{margin-right: 34px;}
+      .navbar-form .form-control {min-width: 25%;}
+      .tracks{text-align: center; margin-top: 30px;}
+      .tracks .panel{text-align: left;}
+      .navbar-form{padding: 0;}
+      .jumbotron{margin-top: 40px; padding: 15px; border-radius: 15px;}
+    </style>
+    <script src="bower_components/underscore/underscore.js"></script>
+    <script src="bower_components/angular/angular.js"></script>
+    <script src="bower_components/angular-audio/app/angular.audio.js"></script>
+    <script src="bower_components/angular-bootstrap/ui-bootstrap.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/constants/intervals.js"></script>
+    <script src="js/constants/sounds.js"></script>
+    <script src="js/services/accurateInterval.js"></script>
+    <script src="js/services/tracks.js"></script>
+    <script src="js/services/metronome.js"></script>
+    <script src="js/services/player.js"></script>
+    <script src="js/controllers/tracksController.js"></script>
+  </head>
+  <body>
+    <div class="container jumbotron" ng-controller="TracksController">
+      <section class="header">
+        <span>{{tempo}} BPM</span>
+        <input id="tempo" type="range" min="20" max="240" ng-model="tempo" ng-mouseup="updateTempo()">
+      </section>
+      <section class="navbar-form tracks">
+        <div class="panel panel-default">
+          <div class="panel-heading">Tracks</div>
+          <ul class="list-group">
+            <li class="list-group-item" class="form-group" ng-repeat="track in tracks">
+              <label for="interval{{track.id}}">Interval: </label>
+              <select class="interval form-control" id="interval{{track.id}}" name="interval" ng-change="updateTracks()" ng-model="track.interval" ng-options="interval as interval.name for interval in intervals">
+              </select>
+              <label for="soundName{{track.id}}">Sound: </label>
+              <select class="sound-name form-control" id="soundName{{track.id}}" name="soundName" ng-model="track.soundName" ng-change="updateTracks()" ng-options="o as o for o in soundNames">
+              </select>
+              <span>Ratio: {{track.interval.numerator}}/{{track.interval.denominator}}</span>
+              <button class="btn btn-default remove" ng-click="removeTrack(track.id)"><span class="glyphicon glyphicon-remove"></span></button>
+            </li>
+          </ul>
+        </div>
+        <button class="btn btn-lg btn-default add-track" ng-click="addTrack()">Add track</button>
+      </section>
+    </div>
+  </body>
+</html>
